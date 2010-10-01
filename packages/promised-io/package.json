@@ -1,0 +1,31 @@
+{
+	"name": "promised-io",
+	"author": "Kris Zyp",
+	"dependencies": [],
+	"contributors": [
+		"Dean Landolt <dean@deanlandolt.com",
+		"Nathan Stott <nathan.stott@whiteboard-it.com>"
+	],
+	"keywords": [
+		"promise",
+		"io"
+	],
+	"engines": {"node":">=0.1.30", "rhino": true},
+	"githubName": "promised-io",
+	"mappings": {
+		"patr": "http://github.com/kriszyp/patr/zipball/v0.2.1"
+	},
+
+	"location": "http://github.com/kriszyp/promised-io/zipball/master",
+	"overlay": {
+		"npm": {
+			"main": "./lib/fs",
+			"directories": { "lib": "./lib" }
+		},
+		"narwhal": {
+			"mappings": {
+				"fs": "../engines/rhino/lib/fs.js"
+			}
+		}
+	}
+}

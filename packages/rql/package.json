@@ -1,0 +1,24 @@
+{
+	"name": "rql",
+	"author": "Kris Zyp",
+	"contributors": ["Vladimir Dronnikov <dronnikov@gmail.com>"],
+	"keywords": [
+		"resource",
+		"query",
+		"uri"
+	],
+	"mappings": {
+		"patr": "http://github.com/kriszyp/patr/zipball/v0.2.1",
+		"promised-io": "http://github.com/kriszyp/promised-io/zipball/v0.2.1"
+	},
+	"githubName": "rql",
+	"type": "zip",
+	"location": "http://github.com/kriszyp/rql/zipball/master",
+	"overlay": {
+		"npm": {
+			"dependencies": {
+				"patr": "*"
+			}
+		}
+	}
+}
