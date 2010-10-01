@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/svn/!svn/ver/721/trunk/WEB-INF
+END
+web.xml.tomcat
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/327/trunk/WEB-INF/web.xml.tomcat
+END
+web.xml.generic
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/327/trunk/WEB-INF/web.xml.generic
+END
+mimetypes.xml
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/105/trunk/WEB-INF/mimetypes.xml
+END
+web.xml
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/622/trunk/WEB-INF/web.xml
+END
+.cvsignore
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/29/trunk/WEB-INF/.cvsignore
+END

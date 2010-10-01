@@ -1,0 +1,51 @@
+<html>
+	<head>
+		<title>Editing content</title>
+
+		<link rel="stylesheet" href="css/edit.css">
+		<link rel="stylesheet" href="css/common.css">
+	</head>
+	<body>
+        <div id="headerContainer">
+			<div id="main-header">Editing page</div>
+        </div>
+        <div id="content">
+			<div id="user-name"></div>
+			<textarea id="content-area"></textarea>
+			<button id="save-button">Save</button>
+			<button id="insert-image">Insert Image</button>
+        </>
+
+
+		<div id="login-form">
+			<label for="user">Name:</label><input id="user" type="text" /><br />
+			<label for="password">Password:</label><input id="password" type="password" /><br />
+			<button id="sign-in">Sign in</button>
+			<button id="register">Register</button>
+		</div>
+		<form id="upload-form" method="POST" enctype="multipart/form-data" target="upload-target" action="/File/">
+			<label>Image to upload:</label><input type="file" name="image"/><br />
+			<button>Upload</button>
+			<iframe name="upload-target" id="upload-target" style="display:none"></iframe>
+		</form>
+		<!-- You can use RequireJS or Yabble (obviously you should download this and have it available locally) -->
+<!--	
+		RequireJS:
+		<script>
+			// Configure RequireJS
+			require = {baseUrl: "lib/"};
+		</script>
+		<script src="http://requirejs.org/docs/release/0.11.0/minified/transportD-require.js"></script>
+		Or Yabble:
+		<script src="http://github.com/jbrantly/yabble/raw/master/lib/yabble.js"></script>
+		<script>
+			if(require.setModuleRoot){
+				// Configure Yabble
+				require.setModuleRoot("lib/");
+				require.useScriptTags();
+			}
+		</script>-->
+		<script src="lib/transporter/receiver.js"></script>
+		<script src="lib/edit.js"></script>
+	</body>
+</html>

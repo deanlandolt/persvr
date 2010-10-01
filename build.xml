@@ -1,0 +1,293 @@
+<?xml version="1.0"?>
+<!-- ======================================================================
+     Persevere Build file
+     ====================================================================== -->
+<project name="Persevere" default="buildPersevere">
+
+        <description>Persevere Build file</description>
+
+        <property environment="env"/>
+        <property name="src.dir" location="WEB-INF/src"/>
+        <property name="appspecific.dir" location="appspecific"/>
+        <property name="base.builds.dir" location="builds"/>
+        <property name="dojo.dir" location="jsclient"/>
+        <property name="persevereClient.builds.dir" location="${base.builds.dir}/persevereClient"/>
+        <property name="persevereServer.builds.dir" location="${base.builds.dir}/persevere"/>
+        <property name="pintura.builds.dir" location="${base.builds.dir}/pintura"/>
+        <property name="classes.dir" location="WEB-INF/classes"/>
+        <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+                <classpath>
+                        <pathelement location="buildLib/ant-contrib-0.6.jar"/>
+                </classpath>
+        </taskdef>
+
+  <path id="classpath">
+    <fileset dir="WEB-INF/lib" includes="**/*.jar"/>
+    <fileset dir="lib" includes="**/*.jar"/>
+    <pathelement path="${classes.dir}"/>
+  </path>
+
+        <target name="compile">
+                <mkdir dir="${classes.dir}"/>
+                <javac source="1.5" target="1.5" debug="true" classpathref="classpath" srcdir="${src.dir}" includes="**" destdir="${classes.dir}" />
+                <copy todir="${classes.dir}" preservelastmodified="true">
+                        <fileset dir="${src.dir}" includes="org/persvr/*.properties,org/persvr/*.js"/>
+                </copy>
+        </target>
+
+        <target name="buildDojo">
+                <outofdate>
+                        <sourcefiles>
+                                <fileset dir="${dojo.dir}" includes="**" excludes="release/**" />
+                                <fileset file="jsclient/build/persevere.profile.js"/>
+                        </sourcefiles>
+                        <targetfiles path="${dojo.dir}/release"/>
+                        <sequential>
+                                <echo message="Rebuilding Dojo"/>
+                                <mkdir dir="${dojo.dir}/release"/>
+                                <java dir="${dojo.dir}/util/buildscripts" classpath="${dojo.dir}/util/shrinksafe/shrinksafe.jar" classname="org.mozilla.javascript.tools.shell.Main" fork="true" >
+                                        <arg value="build.js"/>
+                                        <arg value="profileFile=${basedir}/jsclient/build/persevere.profile.js"/>
+                                        <arg value="action=release"/>
+                                        <arg value="copyTests=true"/>
+                                        <arg value="cssOptimize=comments"/>
+                                </java>
+                        </sequential>
+                </outofdate>
+        </target>
+
+		<target name="buildPinturaJar" depends="compile">
+                <jar destfile="${pintura.builds.dir}/engines/rhino/lib/pintura.jar">
+                        <fileset dir="${classes.dir}" includes="org/persvr/store/**" />
+                </jar>
+		</target>
+
+        <target name="buildPersevereServer" depends="compile">
+                <copy todir="WEB-INF\upgrade\starter\WEB-INF\config" preservelastmodified="true">
+                        <fileset dir="WEB-INF/config/" includes="examples.json" />
+                </copy>
+                <copy todir="${persevereServer.builds.dir}" preservelastmodified="true">
+                        <fileset dir="." includes="**" excludes="jsclient/**,java.hprof.*,nightly/**,core-tests2/**,buildLib/**,WEB-INF/classes/**,WEB-INF/src/**,WEB-INF/config/generated.js,WEB-INF/config/test.json,WEB-INF/lib/catalina.jar,WEB-INF/config/examples.json,WEB-INF/data/**,editor/**,diffs/**,export/**,builds/**,dojo/**,js/**.*,test/**,tests/**,build.xml,ra-cache/**,hs_*,js/**,examples*.html,examples/**,WEB-INF/config/perseverejsclient.json,.settings/**,core-tests/**"/>
+                </copy>
+                <copy todir="${persevereServer.builds.dir}/examples" preservelastmodified="true">
+                        <fileset dir="examples" includes="**" excludes="WEB-INF/data/**,WEB-INF/tests/data/**,WEB-INF/config/generated.js, ra-cache/**, *.log, logs/*"/>
+                </copy>
+                <copy todir="${persevereServer.builds.dir}/examples" preservelastmodified="true">
+                        <fileset dir="examples" includes="WEB-INF/data/example.xml"/>
+                </copy>
+                <copy todir="${persevereServer.builds.dir}/core-tests" preservelastmodified="true">
+                        <fileset dir="core-tests" includes="**" excludes="WEB-INF/data/**,WEB-INF/tests/data/**,WEB-INF/config/generated.js,ra-cache/**, *.log, logs/*, WEB-INF/config/mysql.json, WEB-INF/jslib/interop-compliance/**"/>
+                </copy>
+                <copy todir="${persevereServer.builds.dir}/jsclient" preservelastmodified="true">
+                        <fileset dir="${dojo.dir}/release/dojo/" excludes="dojox/off/demos**">
+                                <include name="dojox/data/JsonRestStore.*"/>
+                                <include name="dojox/cometd/RestChannels.*"/>
+                                <include name="dojox/cometd/HttpChannels.*"/>
+                                <include name="dojox/io/httpParse.*"/>
+                                <include name="dojox/cometd/longPollTransport.*"/>
+                                <include name="dojox/data/ClientFilter.*"/>
+                                <include name="dojox/data/StoreExplorer.*"/>
+                                <include name="dojox/data/nls/**"/>
+                                <include name="dojox/json/schema.*"/>
+                                <include name="dojox/rpc/OfflineRest.*"/>
+                                <include name="dojox/storage/Storage.*"/>
+                                <include name="dojox/storage/storage*.*"/>
+                                <include name="dojox/layout/FloatingPane.*"/>
+                                <include name="dojox/layout/resources/*"/>
+                                <include name="dijit/Tree.*"/>
+                                <include name="dijit/nls/*"/>
+                                <include name="dojo/dojo.js"/>
+                                <include name="dojo/cookie.js"/>
+                                <include name="dojo/regexp.js"/>
+                                <include name="dojo/parser.js"/>
+                                <include name="dojo/resources/*"/>
+                                <include name="dojo/_firebug/*"/>
+                                <include name="dojox/grid/DataGrid.*"/>
+                                <include name="dojox/grid/nls/*"/>
+                                <include name="dojox/grid/resources/**"/>
+                                <include name="dojox/off/**"/>
+                                <include name="dijit/themes/tundra/**"/>
+                                <include name="dijit/themes/soria/**"/>
+                                <include name="dijit/themes/*.css"/>
+                                <include name="dijit/tests/css/*.css"/>
+                                <include name="dijit/tests/images/*"/>
+                                <include name="persevere/**"/>
+                        </fileset>
+                </copy>
+
+                <copy todir="${persevereServer.builds.dir}" preservelastmodified="true">
+                        <fileset dir="." includes="WEB-INF/src/org/**" excludes="WEB-INF/src/org/persvr/jsclient/**"/>
+                </copy>
+                <copy tofile="${persevereServer.builds.dir}/WEB-INF/web.xml" overwrite="true">
+                        <fileset dir="WEB-INF" includes="web.xml.generic"/>
+                </copy>
+                <copy todir="${persevereServer.builds.dir}" preservelastmodified="true">
+                        <fileset dir="." includes="WEB-INF/classes/*.js*"/>
+                </copy>
+                <copy todir="${persevereServer.builds.dir}/WEB-INF/lib" preservelastmodified="true">
+                        <fileset dir="WEB-INF\lib" includes="*" excludes="catalina.jar"/>
+                </copy>
+                <mkdir dir="${persevereServer.builds.dir}/WEB-INF/data"/>
+
+                <jar destfile="${persevereServer.builds.dir}/WEB-INF/lib/persevere.jar">
+                        <fileset dir="${classes.dir}" includes="org/**" />
+                </jar>
+                <jar destfile="${persevereServer.builds.dir}/lib/persevere-default-servlet.jar">
+                        <fileset dir="${classes.dir}" includes="org/persvr/util/PersevereDefaultServlet.*" />
+                </jar>
+                <chmod perm="ugo+rx">
+                        <fileset dir="${persevereServer.builds.dir}/bin">
+                                <include name="**"/>
+                        </fileset>
+                </chmod>
+        </target>
+        <target name="buildJSGI" depends="buildPersevere">
+        	<copy todir="${base.builds.dir}/persevereJSGI/narwhal">
+        		<fileset dir="${persevereServer.builds.dir}/WEB-INF/narwhal">
+        			<exclude name="**/.*" />
+        		</fileset>
+        	</copy>
+        	<copy todir="${base.builds.dir}/persevereJSGI/narwhal/bin">
+        		<fileset dir="${persevereServer.builds.dir}/WEB-INF/narwhal/packages/jack/bin">
+        			<include name="jack*" />
+        		</fileset>
+        	</copy>
+        	<copy todir="${base.builds.dir}/persevereJSGI/example">
+        		<fileset dir="${base.builds.dir}/persevereJSGI/narwhal/packages/persevere-example-wiki" />
+        	</copy>
+        	<replace file="${base.builds.dir}/persevereJSGI/example/start-node.js" token="../../../" value="../narwhal/" />
+        	<copy todir="${base.builds.dir}/persevereJSGI/template">
+        		<fileset dir="${base.builds.dir}/persevereJSGI/narwhal/packages/pintura/template" />
+        	</copy>
+        	<replace file="${base.builds.dir}/persevereJSGI/template/start-node.js" token="../../../" value="../narwhal/" />
+        	<copy todir="${base.builds.dir}/persevereJSGI/narwhal/packages/persevere/public/js">
+        		<fileset dir="${persevereServer.builds.dir}/jsclient" />
+        	</copy>
+        	<copy todir="${base.builds.dir}/persevereJSGI/narwhal/packages/persevere/public/res">
+        		<fileset dir="${persevereServer.builds.dir}/res" />
+        	</copy>
+        </target>
+        <target name="pkgPersevereClient" depends="buildDojo">
+                <copy todir="${persevereClient.builds.dir}" preservelastmodified="true">
+                        <fileset dir="jsclient/release/dojo/" includes="persevere/**"/>
+                </copy>
+                <copy todir="${persevereClient.builds.dir}" preservelastmodified="true">
+                        <fileset dir="jsclient/" includes="persevere/README*"/>
+                </copy>
+                <tar destfile="${base.builds.dir}/persevereClient.tar">
+                        <fileset dir="${persevereClient.builds.dir}" includes="persevere/**"/>
+                </tar>
+
+                <gzip destfile="${base.builds.dir}/persevereClient.tar.gz" src="${base.builds.dir}/persevereClient.tar" />
+        </target>
+        <target name="buildPersevere" depends="buildDojo, buildPersevereServer" />
+        <target name="clean">
+                <delete dir="WEB-INF/classes"/>
+                <delete dir="${persevereServer.builds.dir}"/>
+                <delete dir="${persevereClient.builds.dir}"/>
+                <delete dir="${base.builds.dir}/persevereJSGI"/>
+                <delete dir="${base.builds.dir}/persevereJ2EE"/>
+        </target>
+        <target name="runPersevere" depends="compile">
+                <java classpathref="classpath" classname="org.persvr.util.JettyStart" fork="true" >
+                        <arg value="etc/jetty.xml"/>
+                </java>
+        </target>
+        <target name="runTests" depends="compile">
+                <java classpathref="classpath" classname="org.persvr.util.JettyStart" fork="true" >
+                        <arg value="--core-tests"/>
+                </java>
+        </target>
+        <target name="pkgPersevere" depends="clean, buildPersevere" >
+
+                <tar destfile="${base.builds.dir}/persevereJetty.tar">
+                        <tarfileset dir="${base.builds.dir}" mode="755" username="ant" group="ant">
+                                 <include name="persevere/bin/**"/>
+                        </tarfileset>
+                        <tarfileset dir="${base.builds.dir}" username="ant" group="ant">
+                                 <include name="persevere/**"/>
+                                 <exclude name="persevere/bin/**"/>
+                        </tarfileset>
+                </tar>
+                <gzip destfile="${base.builds.dir}/persevereJetty.tar.gz" src="${base.builds.dir}/persevereJetty.tar" />
+                <zip destfile="${base.builds.dir}/persevereJetty.zip">
+                        <fileset dir="${base.builds.dir}" includes="persevere/**"/>
+                </zip>
+
+        </target>
+        <target name="pkgPersevereJ2EE" depends="clean, buildPersevere" >
+                <copy todir="${base.builds.dir}/persevereJ2EE" preservelastmodified="true">
+                        <fileset dir="${base.builds.dir}/persevere" excludes="lib/**, bin/**, etc/**, webapps/**, logs/**, start.jar"/>
+                </copy>
+                <war destfile="${base.builds.dir}/persevere.war" webxml="${base.builds.dir}/persevereJ2EE/WEB-INF/web.xml">
+                        <fileset dir="${base.builds.dir}/persevereJ2EE" excludes="**/web.xml"/>
+                </war>
+        </target>
+        <target name="pkgJSGI" depends="clean, buildJSGI" >
+                <tar destfile="${base.builds.dir}/persevereJack.tar">
+                        <tarfileset dir="${base.builds.dir}" mode="755" username="ant" group="ant">
+                                 <include name="persevereJSGI/bin/**"/>
+                                 <include name="persevereJSGI/example/bin/**"/>
+                                 <include name="persevereJSGI/template/bin/**"/>
+                                 <include name="persevereJSGI/narwhal/bin/**"/>
+                                 <include name="persevereJSGI/narwhal/engines/rhino/bin/**"/>
+                        </tarfileset>
+                        <tarfileset dir="${base.builds.dir}" username="ant" group="ant">
+                                 <include name="persevereJSGI/**"/>
+                                 <exclude name="persevereJSGI/bin/**"/>
+                                 <exclude name="persevereJSGI/example/bin/**"/>
+                                 <exclude name="persevereJSGI/template/bin/**"/>
+                                 <exclude name="persevereJSGI/narwhal/bin/**"/>
+                                 <exclude name="persevereJSGI/narwhal/engines/rhino/bin/**"/>
+                        </tarfileset>
+                </tar>
+                <gzip destfile="${base.builds.dir}/persevereJack.tar.gz" src="${base.builds.dir}/persevereJack.tar" />
+                <zip destfile="${base.builds.dir}/persevereJack.zip">
+                        <fileset dir="${base.builds.dir}" includes="persevereJSGI/**"/>
+                </zip>
+        </target>
+        <target name="tagRelease">
+                <input message="Enter version number:" addproperty="versionNumber" />
+                <exec dir="." executable="svn" >
+                        <arg value="cp" />
+                        <arg value="https://persevere-framework.googlecode.com/svn/trunk" />
+                        <arg value="https://persevere-framework.googlecode.com/svn/tags/v${versionNumber}" />
+                        <arg value="-m" />
+                        <arg value="Tagging release" />
+                </exec>
+        </target>
+        <target name="nightly">
+                <tstamp>
+                <format property="today" pattern="yyyy-MM-dd" locale="en"/>
+                </tstamp>
+                <tar destfile="${base.builds.dir}/persevere.tar">
+                        <tarfileset dir="." mode="755" username="ant" group="ant">
+                        	<include name="**"/>
+                            <exclude name="builds/**"/>
+                        </tarfileset>
+                </tar>
+                <gzip destfile="../nightly/persevere${today}.tar.gz" src="${base.builds.dir}/persevere.tar" />
+                <zip destfile="../nightly/persevere${today}.zip">
+                        <fileset dir="${base.builds.dir}" includes="**" excludes="builds/**"/>
+                </zip>
+        </target>
+        <target name="fixJettyFileMapping">
+                <jar destfile="lib/jetty-6.1.14.jar" update="true">
+                        <fileset dir="lib/" includes="org/**"/>
+                </jar>
+        </target>
+        <target name="eraseDatabase">
+                <delete dir="WEB-INF/data" />
+                <delete file="WEB-INF/config/generated.js" />
+                <delete dir="core-tests/WEB-INF/data" />
+                <delete file="core-tests/WEB-INF/config/generated.js" />
+                <delete dir="examples/WEB-INF/data" />
+                <delete file="examples/WEB-INF/config/generated.js" />
+        </target>
+        <target name="javadoc">
+                        <javadoc destdir="${base.builds.dir}/javadocs" windowtitle="Persevere API">
+                            <packageset dir="WEB-INF/src" />
+                            <link href="http://www.mozilla.org/rhino/apidocs/" />
+                        </javadoc>
+        </target>
+</project>

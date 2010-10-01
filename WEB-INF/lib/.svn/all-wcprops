@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/721/trunk/WEB-INF/lib
+END
+commons-httpclient-3.0.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/29/trunk/WEB-INF/lib/commons-httpclient-3.0.1.jar
+END
+js.jar
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/666/trunk/WEB-INF/lib/js.jar
+END
+commons-dbcp-1.2.2.jar
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/589/trunk/WEB-INF/lib/commons-dbcp-1.2.2.jar
+END
+commons-io-1.4.jar
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/114/trunk/WEB-INF/lib/commons-io-1.4.jar
+END
+resourceaccelerate.jar
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/602/trunk/WEB-INF/lib/resourceaccelerate.jar
+END
+jline-0.9.94.jar
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/290/trunk/WEB-INF/lib/jline-0.9.94.jar
+END
+lucene-core-2.4.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/614/trunk/WEB-INF/lib/lucene-core-2.4.1.jar
+END
+commons-pool-1.5.2.jar
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/589/trunk/WEB-INF/lib/commons-pool-1.5.2.jar
+END

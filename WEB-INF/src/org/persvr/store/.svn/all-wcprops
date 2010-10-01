@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/705/trunk/WEB-INF/src/org/persvr/store
+END
+LuceneSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/675/trunk/WEB-INF/src/org/persvr/store/LuceneSearch.java
+END
+SQLStore.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/705/trunk/WEB-INF/src/org/persvr/store/SQLStore.java
+END

@@ -1,0 +1,11 @@
+source "$PACKAGE_HOME/packages/narwhal/bin/activate.bash" $PACKAGE_HOME
+
+export NARWHAL_PATH="$PACKAGE_HOME"
+
+cd $PERSVR_APP
+export SEA=$(pwd)
+if [ "$PORT" != "" ]; then
+ jackup -p "$PORT"
+else
+ jackup
+fi
